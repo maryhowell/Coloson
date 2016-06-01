@@ -63,42 +63,42 @@ class ColosonTest < Minitest::Test
     assert_equal "Invalid number: eleventy", body["error"]
   end
 
-  # def test_it_can_sum_numbers
-  #   post "/numbers/primes", number: 7
-  #   post "/numbers/primes", number: 541
-  #   post "/numbers/primes", number: 31
-  #
-  #   response = get "/numbers/primes/sum"
-  #   assert_equal 200, response.status
-  #
-  #   body = JSON.parse response.body
-  #   assert_equal "ok", body["status"]
-  #   assert_equal 579, body["sum"]
-  # end
+  def test_it_can_sum_numbers
+    post "/numbers/primes", number: 7
+    post "/numbers/primes", number: 541
+    post "/numbers/primes", number: 31
 
-  # def test_it_can_multiply_small_numbers
-  #   1.upto(4).each do |i|
-  #     post "/numbers/mine", number: i
-  #   end
-  #
-  #   response = get "/numbers/mine/product"
-  #   assert_equal 200, response.status
-  #
-  #   body = JSON.parse response.body
-  #   assert_equal "ok", body["status"]
-  #   assert_equal 24, body["product"]
-  # end
+    response = get "/numbers/primes/sum"
+    assert_equal 200, response.status
 
-  # def test_it_cant_multiply_larger_numbers
-  #   1.upto(10).each do |i|
-  #     post "/numbers/mine", number: i
-  #   end
-  #
-  #   response = get "/numbers/mine/product"
-  #   assert_equal 422, response.status
-  #
-  #   body = JSON.parse response.body
-  #   assert_equal "error", body["status"]
-  #   assert_equal "Only paid users can multiply numbers that large", body["error"]
-  # end
+    body = JSON.parse response.body
+    assert_equal "ok", body["status"]
+    assert_equal 579, body["sum"]
+  end
+
+  def test_it_can_multiply_small_numbers
+    1.upto(4).each do |i|
+      post "/numbers/mine", number: i
+    end
+
+    response = get "/numbers/mine/product"
+    assert_equal 200, response.status
+
+    body = JSON.parse response.body
+    assert_equal "ok", body["status"]
+    assert_equal 24, body["product"]
+  end
+
+  def test_it_cant_multiply_larger_numbers
+    1.upto(10).each do |i|
+      post "/numbers/mine", number: i
+    end
+
+    response = get "/numbers/mine/product"
+    assert_equal 422, response.status
+
+    body = JSON.parse response.body
+    assert_equal "error", body["status"]
+    assert_equal "Only paid users can multiply numbers that large", body["error"]
+  end
 end

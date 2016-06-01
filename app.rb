@@ -52,6 +52,9 @@ class Coloson < Sinatra::Base
         DB["odds"] = [add_number.to_i]
         200
       end
+    else
+      status 422
+      json(status: "error", error:"Invalid number: #{params["number"]}")
     end
   end
 
@@ -61,8 +64,59 @@ class Coloson < Sinatra::Base
     200
   end
 
+  post "/numbers/primes" do
+    add_number = params["number"]
+    if add_number == add_number.to_i.to_s
+      if DB["primes"]
+        DB["primes"].push(add_number.to_i)
+        200
+      else
+        DB["primes"] = [add_number.to_i]
+        200
+      end
+    else
+      status 422
+      json(status: "error", error:"Invalid number: #{params["number"]}")
+    end
+  end
 
+  get "/numbers/primes/sum" do
+    unless DB["primes"]
+      DB["primes"] = []
+    end
+    json DB["primes"]
+    body json(status: "ok", sum: DB["primes"].inject(:+))
+  end
 
+  post "/numbers/mine" do
+    add_number = params["number"]
+    if add_number == add_number.to_i.to_s
+      if DB["mine"]
+        DB["mine"].push(add_number.to_i)
+        200
+      else
+        DB["mine"] = [add_number.to_i]
+        200
+      end
+    else
+      status 422
+      json(status: "error", error:"Invalid number: #{params["number"]}")
+    end
+  end
+
+  get "/numbers/mine/product" do
+    product = DB["mine"].inject(:*)
+    if product < 1000
+      unless DB["mine"]
+        DB["mine"] = []
+      end
+      json DB["mine"]
+      body json(status: "ok", product: DB["mine"].inject(:*))
+    else
+      status 422
+      json(status: "error", error: "Only paid users can multiply numbers that large")
+    end
+  end
 end
 
 Coloson.run! if $PROGRAM_NAME == __FILE__
