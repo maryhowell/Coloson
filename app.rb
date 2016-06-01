@@ -64,6 +64,13 @@ class Coloson < Sinatra::Base
     200
   end
 
+  get "/numbers/primes" do
+    unless DB["primes"]
+      DB["primes"] = []
+    end
+    json DB["primes"]
+  end
+
   post "/numbers/primes" do
     add_number = params["number"]
     if add_number == add_number.to_i.to_s
@@ -86,6 +93,13 @@ class Coloson < Sinatra::Base
     end
     json DB["primes"]
     body json(status: "ok", sum: DB["primes"].inject(:+))
+  end
+
+  get "/numbers/mine" do
+    unless DB["mine"]
+      DB["mine"] = []
+    end
+    json DB["mine"]
   end
 
   post "/numbers/mine" do
@@ -115,6 +129,32 @@ class Coloson < Sinatra::Base
     else
       status 422
       json(status: "error", error: "Only paid users can multiply numbers that large")
+    end
+  end
+
+  get "/numbers/numberwang" do
+    unless DB["numberwang"]
+      DB["numberwang"] = []
+    end
+    json DB["numberwang"]
+  end
+
+  post "/numbers/numberwang" do
+    numberwang = params["number"]
+    if add_number == add_number.to_i.to_s
+      if DB["numberwang"]
+        DB["numberwang"].push(add_number.to_i)
+
+        puts"you got numberwang!?"
+        200
+      else
+        DB["numberwang"] = [add_number.to_i]
+        puts "not numberwang..."
+        200
+      end
+    else
+      status 422
+      json(status: "error", error:"Not numberwang")
     end
   end
 end
